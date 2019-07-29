@@ -1,0 +1,7 @@
+[MASTER]
+10.155.208.40 ansible_python_interpreter=/usr/bin/python3 ansible_ssh_user=root
+
+[SLAVES]
+10.155.208.250 ansible_python_interpreter=/usr/bin/python3 ansible_ssh_user=root
+10.155.209.32 ansible_python_interpreter=/usr/bin/python3 ansible_ssh_user=root
+10.155.209.23 ansible_python_interpreter=/usr/bin/python3 ansible_ssh_user=root

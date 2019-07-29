@@ -1,0 +1,23 @@
+---
+- name: Configure ssh
+  hosts: all  
+  tasks:
+    - name: Prevent ECDSA Key error between hosts and local machines
+      blockinfile:
+           path: /root/.ssh/config
+           state: present
+           create: yes
+           block: | 
+               Host vm-*.cloud.mwn.de 141.40.2* 10.155.2* *dyn.mwn.de
+               IdentityFile ~/.ssh/id_rsa
+               StrictHostKeyChecking no
+               UserKnownHostsFile /dev/null
+
+    - name: Disable password authentication
+      lineinfile:
+         path: /etc/ssh/sshd_config
+         regexp: '^#PasswordAuthentication yes'
+         line: 'PasswordAuthentication no'
+         state: present
+         backrefs: yes
+      notify: service ssh restart

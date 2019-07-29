@@ -1,0 +1,37 @@
+---
+- name: Configure static hostnames for machines
+  hosts: all
+  tasks:
+    - name: Copy script to assign hostname to ip
+      copy:
+        src: scripts/assign_ip_to_hostname.sh
+        dest: ~/
+        owner: root
+        mode: +x
+        force: no
+    - name: Copy rc.local so that it calls script on startup
+      copy:
+        src: templates/rc.local
+        dest: /etc/
+        owner: root
+        mode: +x
+- name: Update hostname script for master
+  hosts: MASTER
+  tasks:
+    - name: Insert hostname
+      lineinfile: 
+        path: /root/assign_ip_to_hostname.sh
+        regexp: '^HOSTNAME='
+        line: 'HOSTNAME=wpmaster'
+
+- name: Update hostname script for slaves
+  hosts: SLAVES
+  tasks:
+    - name: Insert hostname
+      lineinfile: 
+         path: /root/assign_ip_to_hostname.sh
+         regexp: '^HOSTNAME='
+         line: "HOSTNAME=wpslave{{ groups['SLAVES'].index(inventory_hostname)}}"
+
+
+        
